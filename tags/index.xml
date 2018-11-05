@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Data &amp; Science</title>
+    <link>https://gregoirejan.github.io/tags/</link>
+    <description>Recent content in Tags on Data &amp; Science</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2018</copyright>
+    <lastBuildDate>Wed, 20 Apr 2016 00:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://gregoirejan.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Academic</title>
+      <link>https://gregoirejan.github.io/tags/academic/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/academic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bike sharing</title>
+      <link>https://gregoirejan.github.io/tags/bike-sharing/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/bike-sharing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Deep Learning</title>
+      <link>https://gregoirejan.github.io/tags/deep-learning/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/deep-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://gregoirejan.github.io/tags/r/</link>
+      <pubDate>Sat, 03 Nov 2018 00:00:00 +0100</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bike sharing</title>
+      <link>https://gregoirejan.github.io/tags/bike-sharing/</link>
+      <pubDate>Sat, 03 Nov 2018 00:00:00 +0100</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/bike-sharing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>machine learning</title>
+      <link>https://gregoirejan.github.io/tags/machine-learning/</link>
+      <pubDate>Sat, 03 Nov 2018 00:00:00 +0100</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>machine-learning</title>
+      <link>https://gregoirejan.github.io/tags/machine-learning/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>random forest</title>
+      <link>https://gregoirejan.github.io/tags/random-forest/</link>
+      <pubDate>Sat, 03 Nov 2018 00:00:00 +0100</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/random-forest/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>urban mobility</title>
+      <link>https://gregoirejan.github.io/tags/urban-mobility/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://gregoirejan.github.io/tags/urban-mobility/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
