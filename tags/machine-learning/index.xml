@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>machine learning on Data &amp; Science</title>
+    <title>machine-learning on Data &amp; Science</title>
     <link>https://gregoirejan.github.io/tags/machine-learning/</link>
-    <description>Recent content in machine learning on Data &amp; Science</description>
+    <description>Recent content in machine-learning on Data &amp; Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
-    <lastBuildDate>Sat, 03 Nov 2018 00:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 27 Apr 2016 00:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://gregoirejan.github.io/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Predictive maintenance of bicycles</title>
-      <link>https://gregoirejan.github.io/project/maintenancebike/</link>
-      <pubDate>Sat, 03 Nov 2018 00:00:00 +0100</pubDate>
+      <title>Bike Sharing stations usage</title>
+      <link>https://gregoirejan.github.io/project/external-project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
       
-      <guid>https://gregoirejan.github.io/project/maintenancebike/</guid>
-      <description>Intro In recent years bicycle sharing has become more and more present in Oslo. It provides an alternative to other modes of transport as well as filling the gaps left by public transports. They are many benefits provided by bicycle sharing: times of commuting trips can be potentially reduced, no bicycle theft, health improvement&amp;hellip;
-The main objective of this project is to successfully flag the call for maintenance of a bike.</description>
+      <guid>https://gregoirejan.github.io/project/external-project/</guid>
+      <description></description>
     </item>
     
   </channel>
