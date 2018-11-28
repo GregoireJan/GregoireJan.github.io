@@ -408,6 +408,15 @@ fitrfm&amp;lt;- train(percm ~ .,data=trainingr,
     </item>
     
     <item>
+      <title>Stopping opponent losing streaks</title>
+      <link>https://gregoirejan.github.io/project/losingstreaks/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://gregoirejan.github.io/project/losingstreaks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Academic: the website designer for Hugo</title>
       <link>https://gregoirejan.github.io/post/getting-started/</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
