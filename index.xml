@@ -22,7 +22,7 @@
 
 &lt;p&gt;In recent years bicycle sharing has become more and more present in Oslo. It provides an alternative to other modes of transport as well as filling the gaps left by public transports. They are many benefits provided by bicycle sharing: times of commuting trips can be potentially reduced, no bicycle theft, health improvement&amp;hellip;&lt;/p&gt;
 
-&lt;p&gt;The main objective of this project is to successfully flag the call for maintenance of a bike. The benefits of such prediction would be obvious for the maintenance teams and thus for bike sharing users.You can find all the R code used for this work &lt;a href=&#34;https://&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The main objective of this project is to successfully flag the call for maintenance of a bike. The benefits of such prediction would be obvious for the maintenance teams and thus for bike sharing users.You can find all the R code used for this work &lt;a href=&#34;https://github.com/GregoireJan/PredictiveMaintenanceBike&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;This project is organized as follows:&lt;/p&gt;
 
