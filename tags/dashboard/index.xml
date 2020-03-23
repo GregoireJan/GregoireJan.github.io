@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>data analysis on Data &amp; Science</title>
-    <link>https://gregoirejan.github.io/tags/data-analysis/</link>
-    <description>Recent content in data analysis on Data &amp; Science</description>
+    <title>dashboard on Data &amp; Science</title>
+    <link>https://gregoirejan.github.io/tags/dashboard/</link>
+    <description>Recent content in dashboard on Data &amp; Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
     <lastBuildDate>Mon, 23 Mar 2020 00:00:00 +0100</lastBuildDate>
     
-	<atom:link href="https://gregoirejan.github.io/tags/data-analysis/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://gregoirejan.github.io/tags/dashboard/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       <pubDate>Mon, 23 Mar 2020 00:00:00 +0100</pubDate>
       
       <guid>https://gregoirejan.github.io/project/covid19norway/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Stopping opponent losing streaks</title>
-      <link>https://gregoirejan.github.io/project/losingstreaks/</link>
-      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>https://gregoirejan.github.io/project/losingstreaks/</guid>
       <description></description>
     </item>
     

@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>COVID-19 Dashboard in Norway</title>
+      <link>https://gregoirejan.github.io/project/covid19norway/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0100</pubDate>
+      
+      <guid>https://gregoirejan.github.io/project/covid19norway/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Predictive maintenance of bicycles</title>
       <link>https://gregoirejan.github.io/project/maintenancebike/</link>
       <pubDate>Sat, 03 Nov 2018 00:00:00 +0100</pubDate>
