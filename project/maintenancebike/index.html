@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 3.0.0">
-  <meta name="generator" content="Hugo 0.50" />
+  <meta name="generator" content="Hugo 0.68.3" />
   <meta name="author" content="Grégoire Jan">
 
   
@@ -440,95 +440,74 @@
     
 
     <div class="article-style" itemprop="articleBody">
-      
-
-<h1 id="intro">Intro</h1>
-
+      <h1 id="intro">Intro</h1>
 <p>In recent years bicycle sharing has become more and more present in Oslo. It provides an alternative to other modes of transport as well as filling the gaps left by public transports. They are many benefits provided by bicycle sharing: times of commuting trips can be potentially reduced, no bicycle theft, health improvement&hellip;</p>
-
-<p>The main objective of this project is to successfully flag the call for maintenance of a bike. The benefits of such prediction would be obvious for the maintenance teams and thus for bike sharing users.You can find all the R code used for this work <a href="https://github.com/GregoireJan/PredictiveMaintenanceBike" target="_blank">here</a>.</p>
-
+<p>The main objective of this project is to successfully flag the call for maintenance of a bike. The benefits of such prediction would be obvious for the maintenance teams and thus for bike sharing users.You can find all the R code used for this work <a href="https://github.com/GregoireJan/PredictiveMaintenanceBike">here</a>.</p>
 <p>This project is organized as follows:</p>
-
 <ol>
 <li>Data analysis
-
 <ul>
 <li>Maintenance log</li>
 <li>Bike trips log</li>
 <li>Merging</li>
-</ul></li>
+</ul>
+</li>
 <li>Prediction
-
 <ul>
 <li>Features</li>
 <li>Random Forest</li>
-</ul></li>
+</ul>
+</li>
 <li>Conclusion</li>
 </ol>
-
 <h1 id="data-analysis">Data analysis</h1>
-
 <h2 id="maintenance-log">Maintenance Log</h2>
-
 <p>In order to make a prediction on the maintenance we need to know when the bikes get broken. To do this we have a maintance log which contains all the repairs for the year 2017.
 This file contains every single type of repair done on a bike. Since we are only interested in knowing that the bike was repaired and when it was done we can simply aggregate the dataset per <em>bike ID</em> and <em>date</em>.</p>
-
 <p>Let&rsquo;s be curious at first and check what type of repair is most common. The bar plot shows that we have 3 groups that seems to create most of the repair: chains, breaks and gears.
-<img src="repair.png" alt="" title="Frequency per day" /></p>
-
+<img src="repair.png" alt="" title="Frequency per day"></p>
 <p>Let&rsquo;s have a look now at the aggregated data per month, weekday and hour to see if we can spot any patterns.</p>
-
 <ul>
-<li><p>The bar plot of the frequency per month shows that data starts in April (that is the start of the bike sharing season in Oslo) and ends in Septembre (end of provided file). The mean for a month is ~142 repairs. April and August look a bit busier.
-<img src="freqmounth.png" alt="" title="Frequency per month" /></p></li>
-
-<li><p>The bar plot of the frequency per weekday shows that weekends seems quieter and that Thursday is the busiest day. We can wonder if weekends are quieter due to low repair staff avaibility. However we would expect Mondays to be much busier in such case. The mean for a day is at ~8 repairs.
-<img src="freqwday.png" alt="" title="Frequency per weekday" /></p></li>
-
-<li><p>The bar plot of the frequency per hour show that mornings are much busier than afternoon. One can think that is due to the bikes being broken late at night the day before.
-<img src="freqhour.png" alt="" title="Frequency per hour" /></p></li>
+<li>
+<p>The bar plot of the frequency per month shows that data starts in April (that is the start of the bike sharing season in Oslo) and ends in Septembre (end of provided file). The mean for a month is ~142 repairs. April and August look a bit busier.
+<img src="freqmounth.png" alt="" title="Frequency per month"></p>
+</li>
+<li>
+<p>The bar plot of the frequency per weekday shows that weekends seems quieter and that Thursday is the busiest day. We can wonder if weekends are quieter due to low repair staff avaibility. However we would expect Mondays to be much busier in such case. The mean for a day is at ~8 repairs.
+<img src="freqwday.png" alt="" title="Frequency per weekday"></p>
+</li>
+<li>
+<p>The bar plot of the frequency per hour show that mornings are much busier than afternoon. One can think that is due to the bikes being broken late at night the day before.
+<img src="freqhour.png" alt="" title="Frequency per hour"></p>
+</li>
 </ul>
-
 <h2 id="bike-trips-log">Bike trips log</h2>
-
 <p>The bike trips log represents all the trips from April to September 2017. This dataset contains a <em>bike id</em> for each <em>trip id</em> as well as the following features:</p>
-
 <ul>
 <li>Birth year and gender of the user</li>
 <li>Localisation and number of locks of the start and end station</li>
 <li>Time of the start and end of the trip</li>
 <li>Trip duration</li>
 </ul>
-
-<!--
-trip_id, bike_id, start_station_id, end_station_id, trip_started_at, trip_ended_at, trip_duration, member_birth_year, member_gender, start_station_title, start_station_subtitle, start_station_number_of_locks, 
-start_station_latitude, start_station_longitude, end_station_title, end_station_subtitle, end_station_number_of_locks, end_station_latitude, end_station_longitude)
--->
-
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h2 id="merging">Merging</h2>
-
 <p>Before we can merge the bike trips and the maintance log together we have to make an assumption: the last trip before repair time has caused the bike to break. There are some limitations to this assumption since the bike could have been broken on some trips before (but not reported) or simply broken on the deck. But I believe we could assume that our assumption is correct most of time.</p>
-
 <p>So first we split the end time of each trip into month, day and hour and weekday for the bike trips log.
 Then the dataset is sorted per <em>bike id</em> per end time before copying the trip start time of the next trip.</p>
-
-<pre><code class="language-python"># Sort the data per bike_id and trip end time
-tripsdt &lt;- as.data.table(trips[order(trips$bike_id,trips$trip_ended_at),])
-# Copy the trip start time of the next trip 
-tripsdt[ , next_trip := shift(trip_started_at,type=&quot;lead&quot;)]
-tripsdt &lt;- tripsdt[, c(1:6,28,7:27)]
-# NA value when the bike id changes
-tripsdt &lt;- tripsdt %&gt;% 
-  group_by(bike_id) %&gt;% 
-  mutate(next_trip= ifelse(row_number()==n(), NA, next_trip))
-tripsdt$numnext &lt;-tripsdt$next_trip
-# Convert time to POSIX
-tripsdt$next_trip &lt;- as.POSIXct(tripsdt$next_trip, origin=&quot;1970-01-01&quot;,tz=&quot;UTC&quot;)
-</code></pre>
-
-<p>Now we are ready to merge both logs together using the assumption mentionned earlier. I used SQL to simplify the task!</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Sort the data per bike_id and trip end time</span>
+tripsdt <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>table(trips[order(trips<span style="color:#960050;background-color:#1e0010">$</span>bike_id,trips<span style="color:#960050;background-color:#1e0010">$</span>trip_ended_at),])
+<span style="color:#75715e"># Copy the trip start time of the next trip </span>
+tripsdt[ , next_trip :<span style="color:#f92672">=</span> shift(trip_started_at,type<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;lead&#34;</span>)]
+tripsdt <span style="color:#f92672">&lt;-</span> tripsdt[, c(<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">28</span>,<span style="color:#ae81ff">7</span>:<span style="color:#ae81ff">27</span>)]
+<span style="color:#75715e"># NA value when the bike id changes</span>
+tripsdt <span style="color:#f92672">&lt;-</span> tripsdt <span style="color:#f92672">%&gt;%</span> 
+  group_by(bike_id) <span style="color:#f92672">%&gt;%</span> 
+  mutate(next_trip<span style="color:#f92672">=</span> ifelse(row_number()<span style="color:#f92672">==</span>n(), NA, next_trip))
+tripsdt<span style="color:#960050;background-color:#1e0010">$</span>numnext <span style="color:#f92672">&lt;-</span>tripsdt<span style="color:#960050;background-color:#1e0010">$</span>next_trip
+<span style="color:#75715e"># Convert time to POSIX</span>
+tripsdt<span style="color:#960050;background-color:#1e0010">$</span>next_trip <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>POSIXct(tripsdt<span style="color:#960050;background-color:#1e0010">$</span>next_trip, origin<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;1970-01-01&#34;</span>,tz<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTC&#34;</span>)
+</code></pre></div><p>Now we are ready to merge both logs together using the assumption mentionned earlier. I used SQL to simplify the task!</p>
 <pre><code>### Merge maintenance and bike trip log using SQL
 library(sqldf)
 
@@ -539,28 +518,27 @@ mge &lt;- sqldf(&quot;
   ON t.bike_id = a.bike_id
   AND a.ndate BETWEEN t.numend AND t.numnext
 &quot;)
-</code></pre>
-
-<p>Ok so now we have flagged which trip broke a bike: 1 for broken - 0 otherwise. Then I have performed some cleaning before the next steps: removing rows with NAs for gender or birth year and birth years outside the range 1947-2001 (users must be 16 to have an account).</p>
-
+</code></pre><p>Ok so now we have flagged which trip broke a bike: 1 for broken - 0 otherwise. Then I have performed some cleaning before the next steps: removing rows with NAs for gender or birth year and birth years outside the range 1947-2001 (users must be 16 to have an account).</p>
 <p>Let&rsquo;s analysis who,where and when the bicycles are being broken:</p>
-
 <ul>
-<li><p>Gender: the bar plot below does not show any clear distinction between females and males where the percentage of broken bicycles varies around 0.3%. The other category is not relevant here  since it contains ony 11 cases.
-<img src="brokegender.png" alt="" title="Percentage of broken bicycles per gender" /></p></li>
-
-<li><p>Age: the bar plot below shows that the older the user the bigger the percentage of broken bicycles.
-<img src="brokeage.png" alt="" title="Percentage of broken bicycles per age decade" /></p></li>
-
-<li><p>End stations: the map below does not show any clear areas where the percentage of broken bicycles would have been higher.
-<img src="brokemap.png" alt="" title="Percentage of broken bicycles per end station" /></p></li>
-
-<li><p>Time: the bar plots below show that early mornings, the months of April and August as well as Thrusdays have higher percentages.
-<img src="broketime.png" alt="" title="Percentage of broken bicycles per hour/weekday/month" /></p></li>
+<li>
+<p>Gender: the bar plot below does not show any clear distinction between females and males where the percentage of broken bicycles varies around 0.3%. The other category is not relevant here  since it contains ony 11 cases.
+<img src="brokegender.png" alt="" title="Percentage of broken bicycles per gender"></p>
+</li>
+<li>
+<p>Age: the bar plot below shows that the older the user the bigger the percentage of broken bicycles.
+<img src="brokeage.png" alt="" title="Percentage of broken bicycles per age decade"></p>
+</li>
+<li>
+<p>End stations: the map below does not show any clear areas where the percentage of broken bicycles would have been higher.
+<img src="brokemap.png" alt="" title="Percentage of broken bicycles per end station"></p>
+</li>
+<li>
+<p>Time: the bar plots below show that early mornings, the months of April and August as well as Thrusdays have higher percentages.
+<img src="broketime.png" alt="" title="Percentage of broken bicycles per hour/weekday/month"></p>
+</li>
 </ul>
-
 <p>Before moving forward we will have a look at the correlation between our &ldquo;broke&rdquo; flag and the other numerical features:</p>
-
 <table>
 <thead>
 <tr>
@@ -572,7 +550,6 @@ mge &lt;- sqldf(&quot;
 <th>cumduration</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td align="center">0.001222964</td>
@@ -584,44 +561,32 @@ mge &lt;- sqldf(&quot;
 </tr>
 </tbody>
 </table>
-
 <p>We can see that none of the numerical features have a high correlation with the flag.</p>
-
 <h1 id="prediction">Prediction</h1>
-
 <h2 id="additionnal-features">Additionnal features</h2>
-
 <p>The next step is to compute some additionnal features:</p>
-
-<pre><code class="language-python"># Flag is TRUE on first trip after reparir - otherwise false
-mgena$flag &lt;- c(FALSE,diff(mgena$broke) &lt; 0 | diff(mgena$bike_id) != 0)
-# Flag: 0 if bike does not break - 1 if bike breaks at some point
-mgena$brokemax &lt;- with(mgena, ave(broke, cumsum(flag == TRUE), FUN = max))
-# Cumulative duration until a bike breaks
-mgena$cumduration &lt;- with(mgena, ave(trip_duration, cumsum(flag == TRUE), FUN = cumsum))
-# Index of trips for each bike until it breaks - set back to 1
-mgena$groupindex &lt;- with(mgena, ave(bike_id, cumsum(flag == TRUE), FUN = seq_along))
-# Maximum number of trips for each bike until it breaks
-mgena$groupmax &lt;- with(mgena, ave(groupindex, cumsum(flag == TRUE), FUN = max))
-# Percentage brokne = how much the bike is broken / 100% when broke
-mgena$percm &lt;- mgena$groupindex/mgena$groupmax
-</code></pre>
-
-<ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Flag is TRUE on first trip after reparir - otherwise false</span>
+mgena<span style="color:#960050;background-color:#1e0010">$</span>flag <span style="color:#f92672">&lt;-</span> c(FALSE,diff(mgena<span style="color:#960050;background-color:#1e0010">$</span>broke) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> diff(mgena<span style="color:#960050;background-color:#1e0010">$</span>bike_id) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+<span style="color:#75715e"># Flag: 0 if bike does not break - 1 if bike breaks at some point</span>
+mgena<span style="color:#960050;background-color:#1e0010">$</span>brokemax <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">with</span>(mgena, ave(broke, cumsum(flag <span style="color:#f92672">==</span> TRUE), FUN <span style="color:#f92672">=</span> max))
+<span style="color:#75715e"># Cumulative duration until a bike breaks</span>
+mgena<span style="color:#960050;background-color:#1e0010">$</span>cumduration <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">with</span>(mgena, ave(trip_duration, cumsum(flag <span style="color:#f92672">==</span> TRUE), FUN <span style="color:#f92672">=</span> cumsum))
+<span style="color:#75715e"># Index of trips for each bike until it breaks - set back to 1</span>
+mgena<span style="color:#960050;background-color:#1e0010">$</span>groupindex <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">with</span>(mgena, ave(bike_id, cumsum(flag <span style="color:#f92672">==</span> TRUE), FUN <span style="color:#f92672">=</span> seq_along))
+<span style="color:#75715e"># Maximum number of trips for each bike until it breaks</span>
+mgena<span style="color:#960050;background-color:#1e0010">$</span>groupmax <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">with</span>(mgena, ave(groupindex, cumsum(flag <span style="color:#f92672">==</span> TRUE), FUN <span style="color:#f92672">=</span> max))
+<span style="color:#75715e"># Percentage brokne = how much the bike is broken / 100% when broke</span>
+mgena<span style="color:#960050;background-color:#1e0010">$</span>percm <span style="color:#f92672">&lt;-</span> mgena<span style="color:#960050;background-color:#1e0010">$</span>groupindex<span style="color:#f92672">/</span>mgena<span style="color:#960050;background-color:#1e0010">$</span>groupmax
+</code></pre></div><ul>
 <li><em>cumulative trip duration</em>: cumulative sum of the <em>trip duration</em></li>
 <li><em>group index</em>: index within each group</li>
 <li><em>group index max</em>: maximum index for each group</li>
 <li><em>group broke flag</em>: maximum flag value for each group</li>
 </ul>
-
 <p>A group here is a sub-group of <em>bike id</em> where the boundaries are defined by the first trip after its repair until the next trip where it breaks, i.e. every trips for a given bike until it breaks.</p>
-
 <p>Finally we can compute a last feature that defines how &ldquo;broken&rdquo; is the bicycle by dividing the <em>group index</em> by <em>group max</em>. And now we have the outcome we want to predict! We will call it <em>percentage broken</em>.It is fair to say here that we have made another assumption which is that the bicycles are getting broken in a linear way.</p>
-
 <h2 id="random-forest">Random Forest</h2>
-
 <p>First we only want to keep that bikes group that have been broken (we use our <em>group index max</em> for this purpose). Then we retain the following features only:</p>
-
 <ul>
 <li>Bike id</li>
 <li>End station id</li>
@@ -632,22 +597,16 @@ mgena$percm &lt;- mgena$groupindex/mgena$groupmax
 <li>Cummulative duration</li>
 <li>Percentage borken (our outcome)</li>
 </ul>
-
 <p>Now we can split our data into a training (70% of the trips) and testing dataset (30% of the trips).</p>
-
 <p>We are now ready to train our model!
 <em>Ranger</em> is a fast implementation of random forests (Breiman 2001) or recursive partitioning.</p>
-
-<pre><code class="language-python"># Random Forest - Ranger from CARET
-fitrfm&lt;- train(percm ~ .,data=trainingr,
-                     method = &quot;ranger&quot;,
-                     trControl = trainControl(method=&quot;cv&quot;, number = 5, verboseIter = T, classProbs = T),
-                     num.trees = 100,
-                     importance = &quot;permutation&quot;)
-</code></pre>
-
-<p>Before taking a look at the predictions using our trained model let&rsquo;s see the importance of the features:</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Random Forest - Ranger from CARET</span>
+fitrfm<span style="color:#f92672">&lt;-</span> train(percm <span style="color:#f92672">~</span> <span style="color:#f92672">.</span>,data<span style="color:#f92672">=</span>trainingr,
+                     method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ranger&#34;</span>,
+                     trControl <span style="color:#f92672">=</span> trainControl(method<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cv&#34;</span>, number <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>, verboseIter <span style="color:#f92672">=</span> T, classProbs <span style="color:#f92672">=</span> T),
+                     num<span style="color:#f92672">.</span>trees <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>,
+                     importance <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;permutation&#34;</span>)
+</code></pre></div><p>Before taking a look at the predictions using our trained model let&rsquo;s see the importance of the features:</p>
 <table>
 <thead>
 <tr>
@@ -655,112 +614,90 @@ fitrfm&lt;- train(percm ~ .,data=trainingr,
 <th align="center">Weights</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td align="center">cumduration</td>
 <td align="center">1.000e+02</td>
 </tr>
-
 <tr>
 <td align="center">bike_id</td>
 <td align="center">5.002e+01</td>
 </tr>
-
 <tr>
 <td align="center">monthAug</td>
 <td align="center">2.673e+01</td>
 </tr>
-
 <tr>
 <td align="center">monthJul</td>
 <td align="center">1.716e+01</td>
 </tr>
-
 <tr>
 <td align="center">monthMay</td>
 <td align="center">1.386e+01</td>
 </tr>
-
 <tr>
 <td align="center">monthJun</td>
 <td align="center">1.056e+01</td>
 </tr>
-
 <tr>
 <td align="center">monthSep</td>
 <td align="center">8.242e+00</td>
 </tr>
-
 <tr>
 <td align="center">monthApr</td>
 <td align="center">2.549e+00</td>
 </tr>
-
 <tr>
 <td align="center">wdayThursday</td>
 <td align="center">8.692e-01</td>
 </tr>
-
 <tr>
 <td align="center">wdayWednesday</td>
 <td align="center">6.368e-01</td>
 </tr>
-
 <tr>
 <td align="center">wdayFriday</td>
 <td align="center">6.069e-01</td>
 </tr>
-
 <tr>
 <td align="center">hour</td>
 <td align="center">5.494e-01</td>
 </tr>
-
 <tr>
 <td align="center">wdaySaturday</td>
 <td align="center">4.309e-01</td>
 </tr>
-
 <tr>
 <td align="center">wdayTuesday</td>
 <td align="center">4.056e-01</td>
 </tr>
-
 <tr>
 <td align="center">wdayMonday</td>
 <td align="center">3.260e-01</td>
 </tr>
-
 <tr>
 <td align="center">trip_duration</td>
 <td align="center">2.644e-01</td>
 </tr>
-
 <tr>
 <td align="center">end_station_id</td>
 <td align="center">6.339e-02</td>
 </tr>
-
 <tr>
 <td align="center">member_birth_year</td>
 <td align="center">4.544e-02</td>
 </tr>
-
 <tr>
 <td align="center">member_genderother</td>
 <td align="center">1.038e-02</td>
 </tr>
-
 <tr>
 <td align="center">member_gendermale</td>
 <td align="center">9.616e-03</td>
 </tr>
 </tbody>
 </table>
-
 <p>This is not surprising to see the cumulative duration as the top factor for the decision tree. However the <em>month</em> seems to have a great impact as well and we could wonder if this is justified. The dataset we use contains only bicycles trips from 2017. One can wonder if the <em>month</em> feature is really representative. We would need data from other years to confirm it. We will then train our model another time but without the <em>month</em> feature this time. Here are the metrics to assess our models after predicting our outcome <em>percentage borken</em> using the testing dataset:</p>
-
 <table>
 <thead>
 <tr>
@@ -769,14 +706,12 @@ fitrfm&lt;- train(percm ~ .,data=trainingr,
 <th align="center">Root Mean Square Error</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td align="center">Model 1 (All features)</td>
 <td align="center">0.93</td>
 <td align="center">7.8</td>
 </tr>
-
 <tr>
 <td align="center">Model 2 (All features without month)</td>
 <td align="center">0.81</td>
@@ -784,20 +719,13 @@ fitrfm&lt;- train(percm ~ .,data=trainingr,
 </tr>
 </tbody>
 </table>
-
 <p>Even though the R square value is decreasing by 12 points it is still a fairly good achievement and so is the Root Mean Square error. As a reminder, a perfect R Square value would be 1 and we want the Root Mean Square error to be as small as possible, e.g. for model 2 we are on average 12.1 points away from the true value.</p>
-
 <p>We can now visualise our prediction vs the observed value for the model 2 on the testing dataset:
-<img src="obspred.png" alt="" title="Oberserved vs Predicted percentage broken values" /></p>
-
+<img src="obspred.png" alt="" title="Oberserved vs Predicted percentage broken values"></p>
 <p>We can see that most of the prediction falls around the perfect fit line. The prediction seems to be more accurate above the oberserved value of 50% which is in our interest.</p>
-
 <h1 id="conclusion">Conclusion</h1>
-
 <p>Since we have fairly good accuracy even for the model 2 we could set a flag with a high <em>percentage broken</em> prediction. If we were to choose a value of 90% using model 2 we would have only missed 1.7% of the broken bikes for the testing dataset.</p>
-
 <p>Further work could be done to improve the hyper parameters of the model. We could as well challenge our assumption stating that the bicycles get broken in a liner way.</p>
-
 <p>If you enjoyed this project and/or have any comments please feel free to contact me!</p>
 
     </div>
@@ -807,11 +735,11 @@ fitrfm&lt;- train(percm ~ .,data=trainingr,
 
 <div class="article-tags">
   
-  <a class="badge badge-light" href="/tags/bike-sharing/">bike sharing</a>
+  <a class="badge badge-light" href="">bike sharing</a>
   
-  <a class="badge badge-light" href="/tags/machine-learning/">machine learning</a>
+  <a class="badge badge-light" href="">machine learning</a>
   
-  <a class="badge badge-light" href="/tags/random-forest/">random forest</a>
+  <a class="badge badge-light" href="/tags/r/">random forest</a>
   
   <a class="badge badge-light" href="/tags/r/">R</a>
   
@@ -926,7 +854,7 @@ fitrfm&lt;- train(percm ~ .,data=trainingr,
   
 
   <p class="powered-by">
-    &copy; 2018 &middot; 
+    © 2018 &middot; 
 
     Powered by the
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

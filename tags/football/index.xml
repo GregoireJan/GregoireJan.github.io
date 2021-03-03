@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>football on Data &amp; Science</title>
@@ -18,7 +18,7 @@
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
       
       <guid>https://gregoirejan.github.io/project/losingstreaks/</guid>
-      <description></description>
+      <description>Web-app to check which football teams are &amp;lsquo;best&amp;rsquo; at stopping opponent losing streaks. Github repo available &lt;a href=&#34;https://github.com/GregoireJan/LosingStreak&#34;&gt;here&lt;/a&gt;.</description>
     </item>
     
   </channel>

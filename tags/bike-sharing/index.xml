@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>bike sharing on Data &amp; Science</title>
+    <title>Bike sharing on Data &amp; Science</title>
     <link>https://gregoirejan.github.io/tags/bike-sharing/</link>
-    <description>Recent content in bike sharing on Data &amp; Science</description>
+    <description>Recent content in Bike sharing on Data &amp; Science</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018</copyright>
@@ -18,8 +18,16 @@
       <pubDate>Sat, 03 Nov 2018 00:00:00 +0100</pubDate>
       
       <guid>https://gregoirejan.github.io/project/maintenancebike/</guid>
-      <description>Intro In recent years bicycle sharing has become more and more present in Oslo. It provides an alternative to other modes of transport as well as filling the gaps left by public transports. They are many benefits provided by bicycle sharing: times of commuting trips can be potentially reduced, no bicycle theft, health improvement&amp;hellip;
-The main objective of this project is to successfully flag the call for maintenance of a bike.</description>
+      <description>Project on predictive maintenance of bicycles using Random Forest</description>
+    </item>
+    
+    <item>
+      <title>Bike Sharing stations usage</title>
+      <link>https://gregoirejan.github.io/project/external-project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://gregoirejan.github.io/project/external-project/</guid>
+      <description>This project is a first step into predicting the frequency of bike sharing stations usage in Oslo.</description>
     </item>
     
   </channel>
